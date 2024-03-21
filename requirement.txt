@@ -1,4 +1,4 @@
-flask,
-flask_sqlalchemy,
-flask_jwt_extended,
-python-dotenv,
+Flask
+flask_sqlalchemy
+flask_jwt_extended
+python-dotenv
