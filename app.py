@@ -1,6 +1,6 @@
 # app.py
 from flask import Flask
-from models import db, SECRET_KEY
+from models import db
 from routes import api
 from dotenv import load_dotenv
 import os
@@ -11,7 +11,8 @@ load_dotenv()
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['JWT_SECRET_KEY'] = SECRET_KEY
+# app.config['JWT_SECRET_KEY'] = SECRET_KEY
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 db.init_app(app)
 
 # Register API routes
