@@ -12,7 +12,7 @@ class Observer(db.Model):
 
     def __init__(self, username, password):
         self.username = username
-        self.password = generate_password_hash(password)
+        self.password = password
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
@@ -20,7 +20,8 @@ class Observer(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
-            'username': self.username
+            'username': self.username,
+            'password': self.password
         }
 
 class Observation(db.Model):
@@ -53,16 +54,16 @@ class City(db.Model):
     __tablename__ = 'cities'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), unique=True, nullable=False)
+    city = db.Column(db.String(100), unique=True, nullable=False)
     country = db.Column(db.String(100), nullable=False)
 
-    def __init__(self, name, country):
-        self.name = name
+    def __init__(self, city, country):
+        self.city = city
         self.country = country
 
     def to_dict(self):
         return {
             'id': self.id,
-            'name': self.name,
+            'city': self.city,
             'country': self.country
         }

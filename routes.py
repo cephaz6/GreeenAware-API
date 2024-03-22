@@ -20,9 +20,18 @@ def observer_login():
     return login()
 
 @router.route('/observers', methods=['GET'])
-@jwt_required()
+# @jwt_required()   
 def get_all_observers():
     return get_observers()
+
+
+@router.route('/cities', methods=['POST'])
+def add_city_route():
+    return add_city()
+
+@router.route('/cities', methods=['GET'])
+def view_cities():
+    return view_city()
 
 # Error handling
 router.register_error_handler(404, handle_not_found_error)
