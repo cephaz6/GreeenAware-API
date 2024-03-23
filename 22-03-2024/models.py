@@ -9,12 +9,10 @@ class Observer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
-    user_role = db.Column(db.String(100), default=False)
 
-    def __init__(self, username, password, user_role):
+    def __init__(self, username, password):
         self.username = username
         self.password = password
-        self.user_role = user_role
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
@@ -23,8 +21,7 @@ class Observer(db.Model):
         return {
             'id': self.id,
             'username': self.username,
-            'password': self.password,
-            'user_role': self.user_role
+            'password': self.password
         }
 
 class Observation(db.Model):
@@ -51,7 +48,7 @@ class Observation(db.Model):
     weather = db.relationship('Weather', backref=db.backref('weathers', lazy=True))
 
     def __init__(self, date, time, timezone_offset, latitude, longitude, temperature_land_surface,
-                 temperature_sea_surface, humidity, wind_speed, wind_direction, precipitation, haze, city_id, weather_id):
+                 temperature_sea_surface, humidity, wind_speed, wind_direction, precipitation, haze, notes, city_id):
         self.date = date
         self.time = time
         self.timezone_offset = timezone_offset
