@@ -71,8 +71,6 @@ def login():
         return jsonify({'message': str(e)}), 500
 
 
-
-
 # __________________ SEE LIST OF ALL OBSERVERS
 def get_observers():
     observers = Observer.query.all()
@@ -81,27 +79,39 @@ def get_observers():
 
 # __________________OBSERVER ADD A NEW CITY
 def add_city():
-    try:
-        # Extract city data from request
-        data = request.json
+    # try:
+        # Extract observer username and access token from request headers
 
-        # Create a new city object
-        new_city = City(
-            city=data['city'],
-            country=data['country'],
-            timezone_offset=data['timezone_offset'],
-            latitude=data['latitude'],
-            longitude=data['longitude']
-        )
+        # observer_username = request.headers.get('user')
+        # access_token = request.headers.get('access_token')
 
-        # Add the new city to the database
-        db.session.add(new_city)
-        db.session.commit()
+        # Verify access token and get observer
 
-        return jsonify({'message': 'City added successfully'}), 201
+        # observer = verify_access_token(access_token)
+        # if not observer:
+        #     return jsonify({'message': 'Invalid access token'}), 401
 
-    except Exception as e:
-        return jsonify({'message': str(e)}), 500
+        # Check if observer has permission to add city
+        
+        # if observer.username != observer_username:
+        #     return jsonify({'message': 'Unauthorized'}), 403
+
+        # Extract city data from request body
+    city_data = request.json
+    if not city_data:
+        return jsonify({'message': 'City data is required'}), 400
+
+    # Create a new city object
+    city = City(city=city_data.get('city'), country=city_data.get('country'))
+
+    # Add city to the database
+    db.session.add(city)
+    db.session.commit()
+
+    return jsonify({'message': 'City added successfully', 'city_id': city.id}), 201
+
+    # except Exception as e:
+    #     return jsonify({'message': str(e)}), 500
 
 
 # __________________ SEE LIST OF ALL CITIES
@@ -111,69 +121,72 @@ def view_city():
 
 
 
-
-
 #_____________________ ADD OBSERVATION CONTOLLER
 def add_observation():
     try:
-        # Extract observation data from request
-        data = request.json
-
-        # Check if the city name exists in the cities table
-        city = City.query.filter_by(city=data['city_name']).first()
-        if not city:
-            return jsonify({'message': 'City not found'}), 404
-
-        date_str = data['date']
+        # Extract observation data from request body
+        observation_data = request.json
+        if not observation_data:
+            return jsonify({'message': 'Observation data is required'}), 400
+        
+        date_str = observation_data.get('date')
         date_str = datetime.strptime(date_str, "%Y-%m-%d").date()
 
-        time_str = data['time']
+        time_str = observation_data.get('time')
         time_str = datetime.strptime(time_str, "%H:%M:%S").time()
 
         # Create a new observation object
-        new_observation = Observation(
-            date=date_str,
-            time=time_str,
-            temperature_land_surface=data['temperature_land_surface'],
-            temperature_sea_surface=data['temperature_sea_surface'],
-            humidity=data['humidity'],
-            wind_speed=data['wind_speed'],
-            wind_direction=data['wind_direction'],
-            precipitation=data['precipitation'],
-            haze=data['haze'],
-            city_name=data['city_name'],
-            weather_id=data['weather_id']
+        observation = Observation(
+            date = date_str,
+            time = time_str,
+            timezone_offset=observation_data.get('timezone_offset'),
+            latitude=observation_data.get('latitude'),
+            longitude=observation_data.get('longitude'),
+            temperature_land_surface=observation_data.get('temperature_land_surface'),
+            temperature_sea_surface=observation_data.get('temperature_sea_surface'),
+            humidity=observation_data.get('humidity'),
+            wind_speed=observation_data.get('wind_speed'),
+            wind_direction=observation_data.get('wind_direction'),
+            precipitation=observation_data.get('precipitation'),
+            haze=observation_data.get('haze'),
+            city_id=observation_data.get('city_id'),
+            weather_id=observation_data.get('weather_id')
         )
 
-        # Add the new observation to the database
-        db.session.add(new_observation)
+        # Add observation to the database
+        db.session.add(observation)
         db.session.commit()
 
-        return jsonify({'message': 'Observation added successfully'}), 201
+        return jsonify({'message': 'Observation added successfully', 'observation_id': observation.id}), 201
 
     except Exception as e:
         return jsonify({'message': str(e)}), 500
-
 
 # ____________________________________GET ALL OBSERVATIONS
 def get_observations():
     observations = Observation.query.all()
     return jsonify([observations.to_dict() for observations in observations])
 
-
 #______________________________________________GET OBSERVATION BY ID
-def get_observations_by_ids(city_name):
+def get_observations_by_ids(weather_id, city_id):
     try:
-        # Query the database for the observation with the specified city name
-        observation = Observation.query.join(City).filter(City.city == city_name).first()
+        # Query observations with matching weather_id and city_id
+        observations = Observation.query.filter_by(weather_id=weather_id, city_id=city_id).all()
 
-        # Check if the observation exists
-        if observation:
-            # Serialize the observation data
+        # Check if any observations were found
+        if not observations:
+            return jsonify({'message': 'No observations found for the specified IDs'}), 404
+
+        # Serialize observations data to JSON
+        observations_data = []
+        for observation in observations:
             observation_data = {
                 'id': observation.id,
                 'date': str(observation.date),
                 'time': str(observation.time),
+                'timezone_offset': observation.timezone_offset,
+                'latitude': observation.latitude,
+                'longitude': observation.longitude,
                 'temperature_land_surface': observation.temperature_land_surface,
                 'temperature_sea_surface': observation.temperature_sea_surface,
                 'humidity': observation.humidity,
@@ -181,7 +194,7 @@ def get_observations_by_ids(city_name):
                 'wind_direction': observation.wind_direction,
                 'precipitation': observation.precipitation,
                 'haze': observation.haze,
-                'city_name': {
+                'city': {
                     'id': observation.city.id,
                     'city': observation.city.city,
                     'country': observation.city.country
@@ -192,10 +205,9 @@ def get_observations_by_ids(city_name):
                     'description': observation.weather.description
                 }
             }
+            observations_data.append(observation_data)
 
-            return jsonify(observation_data), 200
-        else:
-            return jsonify({'message': 'Observation not found for city: {}'.format(city_name)}), 404
+        return jsonify({'observations': observations_data}), 200
 
     except Exception as e:
         return jsonify({'message': str(e)}), 500

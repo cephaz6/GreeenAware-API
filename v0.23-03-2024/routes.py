@@ -48,12 +48,9 @@ def add_new_observation():
 def get_all_observation():
     return get_observations()
 
-@router.route('/observations/city_name=<city_name>', methods=['GET'])
-def get_observation(city_name):
-    return get_observations_by_ids(city_name)
-
-
-
+@router.route('/observations/weather_id=<int:weather_id>&city_id=<int:city_id>', methods=['GET'])
+def get_observations(weather_id, city_id):
+    return get_observations_by_ids(weather_id, city_id)
 
 #_____________________________________________________  WEATHER ROUTES
 @router.route('/get-weather', methods=['GET'])

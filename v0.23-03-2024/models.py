@@ -33,7 +33,9 @@ class Observation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False)
     time = db.Column(db.Time, nullable=False)
-    
+    timezone_offset = db.Column(db.String(10), nullable=False)
+    latitude = db.Column(db.Float, nullable=False)
+    longitude = db.Column(db.Float, nullable=False)
     temperature_land_surface = db.Column(db.Float, nullable=False)
     temperature_sea_surface = db.Column(db.Float, nullable=False)
     humidity = db.Column(db.Float, nullable=False)
@@ -42,18 +44,19 @@ class Observation(db.Model):
     precipitation = db.Column(db.Float, nullable=False)
     haze = db.Column(db.Float, nullable=False)
 
-    city_name = db.Column(db.Integer, db.ForeignKey('cities.city'), nullable=False)
+    city_id = db.Column(db.Integer, db.ForeignKey('cities.id'), nullable=False)
     city = db.relationship('City', backref=db.backref('observations', lazy=True))
 
     weather_id = db.Column(db.Integer, db.ForeignKey('weathers.id'), nullable=False)
     weather = db.relationship('Weather', backref=db.backref('weathers', lazy=True))
 
-    def __init__(self, date, time, temperature_land_surface,
-                 temperature_sea_surface, humidity, wind_speed, 
-                 wind_direction, precipitation, haze, city_name, weather_id):
-        
+    def __init__(self, date, time, timezone_offset, latitude, longitude, temperature_land_surface,
+                 temperature_sea_surface, humidity, wind_speed, wind_direction, precipitation, haze, city_id, weather_id):
         self.date = date
         self.time = time
+        self.timezone_offset = timezone_offset
+        self.latitude = latitude
+        self.longitude = longitude
         self.temperature_land_surface = temperature_land_surface
         self.temperature_sea_surface = temperature_sea_surface
         self.humidity = humidity
@@ -61,7 +64,7 @@ class Observation(db.Model):
         self.wind_direction = wind_direction
         self.precipitation = precipitation
         self.haze = haze
-        self.city_name = city_name
+        self.city_id = city_id
         self.weather_id = weather_id
 
     def to_dict(self):
@@ -69,6 +72,9 @@ class Observation(db.Model):
             'id': self.id,
             'date': str(self.date),
             'time': str(self.time),
+            'timezone_offset': self.timezone_offset,
+            'latitude': self.latitude,
+            'longitude': self.longitude,
             'temperature_land_surface': self.temperature_land_surface,
             'temperature_sea_surface': self.temperature_sea_surface,
             'humidity': self.humidity,
@@ -77,7 +83,7 @@ class Observation(db.Model):
             'precipitation': self.precipitation,
             'haze': self.haze,
             
-            'city_name': self.city_name,
+            'city_id': self.city_id,
             'weather_id': self.weather_id
         }
 
@@ -88,25 +94,16 @@ class City(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     city = db.Column(db.String(100), unique=True, nullable=False)
     country = db.Column(db.String(100), nullable=False)
-    timezone_offset = db.Column(db.String(10), nullable=False)
-    latitude = db.Column(db.Float, nullable=False)
-    longitude = db.Column(db.Float, nullable=False)
 
-    def __init__(self, city, country, timezone_offset, latitude, longitude):
+    def __init__(self, city, country):
         self.city = city
         self.country = country
-        self.timezone_offset = timezone_offset
-        self.latitude = latitude
-        self.longitude = longitude
 
     def to_dict(self):
         return {
             'id': self.id,
             'city': self.city,
-            'country': self.country,
-            'timezone_offset': self.timezone_offset,
-            'latitude': self.latitude,
-            'longitude': self.longitude,
+            'country': self.country
         }
 
 class Weather(db.Model):
