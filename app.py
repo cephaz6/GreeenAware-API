@@ -11,7 +11,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from models import db
 from dotenv import load_dotenv
-# from flask_migrate import Migrate
+from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 import os
 
 # Load environment variables
@@ -23,7 +23,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 db.init_app(app)
-
+jwt = JWTManager(app)
 
 # Register API routes
 from routes import router as router
