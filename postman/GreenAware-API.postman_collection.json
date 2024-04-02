@@ -38,6 +38,65 @@
 					"response": []
 				},
 				{
+					"name": "UPDATE CITY",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMjA3ODUyNSwianRpIjoiZjExYWVmZDktMzNiNy00NDBkLWEwODEtOGFhZjliNjlmNjg4IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImNocmlzIiwibmJmIjoxNzEyMDc4NTI1LCJjc3JmIjoiMDBlNWEzMzItNWNlMi00MzgzLWIyNDgtNGEwODY3ZWYxMDVhIiwiZXhwIjoxNzEyMDc5NDI1fQ.AVQpKeYE2r4kTDmRb7qKNAxCBlMhA6DVQx_gEn2kwbs",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"city\": \"Bootle\",\r\n    \"country\": \"United Kingdom\",\r\n    \"timezone_offset\": \"GMT+0\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/update-city/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"update-city",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE CITY",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"city\": \"Manchester\",\r\n    \"country\": \"United Kingdom\",\r\n    \"timezone_offset\": \"GMT+0\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/cities",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "VIEW CITIES",
 					"request": {
 						"method": "GET",
@@ -74,12 +133,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/observer_signup",
+							"raw": "{{url}}/observer-signup",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"observer_signup"
+								"observer-signup"
 							]
 						}
 					},
@@ -139,12 +198,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/observer_login",
+							"raw": "{{url}}/observer-login",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"observer_login"
+								"observer-login"
 							]
 						}
 					},
@@ -154,14 +213,20 @@
 					"name": "VIEW ALL OBSERVERS",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMTY4Mjc4OSwianRpIjoiM2E1NTAxNzEtZWE0ZC00MDZlLTliNDMtOTE0ZTM2OGZhODU1IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImNocmlzIiwibmJmIjoxNzExNjgyNzg5LCJjc3JmIjoiM2IzMjdiMjUtMjRlNi00MjNhLTk5YTctZTViZGI4MjBhMmIyIiwiZXhwIjoxNzExNjgzNjg5fQ.27QHotPL7ZPQpGzZuDp-otoI7AFluor4sZyTFn8beTY",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{url}}/get_observers",
+							"raw": "{{url}}/get-observers",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"get_observers"
+								"get-observers"
 							]
 						}
 					},
@@ -179,7 +244,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"main\": \"Thunderstorm\",\r\n    \"description\": \"thunderstorm with rain\"\r\n}",
+							"raw": "{\r\n   \"main\": \"Rain\",\r\n   \"description\": \"heavy intensity rain\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -193,6 +258,72 @@
 							],
 							"path": [
 								"add-weather"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE WEATHER",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{Authorization}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"main\": \"Sun\",\r\n   \"description\": \"tough and shinning\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/update-weather/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"update-weather",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE WEATHER",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{Authorization}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"main\": \"Sun\",\r\n   \"description\": \"tough and shinning\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/update-weather/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"update-weather",
+								"1"
 							]
 						}
 					},
@@ -504,6 +635,10 @@
 		{
 			"key": "url",
 			"value": "http://127.0.0.1:5000/"
+		},
+		{
+			"key": "Authorization",
+			"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMjA3Mjg2MiwianRpIjoiNTI5MmUyNWQtMjdlMi00YjM4LTgwYzQtNDNkOTJiN2FlOTJjIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImNocmlzIiwibmJmIjoxNzEyMDcyODYyLCJjc3JmIjoiYTYxZmIwZGItMTA1Yy00YTBiLWEzNGQtNTgwOTI2M2M5ODNjIiwiZXhwIjoxNzEyMDczNzYyfQ.Fp1K5aENPzdQ0FKeNEQTJjS-nzhJqD6Up01TlKoEXbA"
 		}
 	]
 }
