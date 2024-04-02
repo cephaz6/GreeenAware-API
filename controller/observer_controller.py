@@ -67,7 +67,8 @@ def login():
             'status_code': 200}
             ), 200
 
-        response.set_cookie('access_token', access_token)
+        # response.headers['Authorization'] = 'Bearer ' + access_token
+        # response.set_cookie('access_token', access_token)
 
     except Exception as e:
         return jsonify({'message': str(e)}), 500

@@ -1,6 +1,7 @@
 #Imports from other files
-from models import db, Observer, City, Observation
+from models import db, City, Observation
 from utils.w3w_generator import get_w3w_address
+from utils.verification import *
 from utils.error_handler import handle_not_found_error, handle_internal_server_error
 
 
@@ -14,10 +15,7 @@ from flask_jwt_extended import get_jwt_identity
 def add_observation():
     try:
         #check if authenticated
-        current_user = get_jwt_identity()
-
-        if not current_user:
-            return jsonify({'message': 'Unauthorized'}), 403
+        verify_observer()
 
         data = request.json
 
@@ -71,3 +69,19 @@ def get_observations():
         
     observations = Observation.query.all()
     return jsonify([observations.to_dict() for observations in observations])
+
+
+#_______________________________________UPDATE OBSERVATION
+def update_observation(id):
+
+    verify_observer()
+
+    observation = Observation.query.get_or_404(id)
+    data = request.json
+
+    for field in ['temperature_land_surface', 'temperature_sea_surface', 'humidity', 'wind_speed', 'wind_direction', 'precipitation', 'haze']:
+        if field in data:
+            setattr(observation, field, data[field])
+
+    db.session.commit()
+    return jsonify({'message': 'Observation updated successfully'}), 200

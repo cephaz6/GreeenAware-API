@@ -12,7 +12,7 @@ from flask_jwt_extended import jwt_required
 
 router = Blueprint('router', __name__)
 
-
+#_________________________________________________________________________
 #_________THE_PUBLIC_API__ENDPOINTS_______________________PUBLIC USERS ROUTES
 @router.route('/', methods=['GET'])
 def homepage():
@@ -37,7 +37,7 @@ def get_observation():
     return get_observations_by_city()
 
 
-
+#_________________________________________________________________________
 #________________________________________________________ OBSERVER ROUTES
 @router.route('/observer-signup', methods=['POST'])
 def observer_signup():
@@ -52,7 +52,7 @@ def observer_login():
 def get_all_observers():
     return get_observers()
 
-
+#_________________________________________________________________________
 #_____________________________________________________  CITIES ROUTES
 @router.route('/cities', methods=['POST'])
 @jwt_required()
@@ -86,9 +86,16 @@ def add_new_observation():
 @jwt_required()   
 def get_all_observation():
     return get_observations()
+    
+@router.route('/update-observations/<int:id>', methods=['PATCH'])
+@jwt_required()   
+def observation_update(id):
+    return update_observation(id)
 
 
 
+
+#_________________________________________________________________________
 #_____________________________________________________  WEATHER ROUTES
 @router.route('/get-weather', methods=['GET'])
 @jwt_required()   
