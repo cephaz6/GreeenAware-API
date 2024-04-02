@@ -1,7 +1,8 @@
 # GreeenAware-API
 
-### Greenaware, is concerned with the climate changes caused by 
-### Global Warming.  Greenaware’s mission is to collect data to improve awareness and drive predictive modelling initiatives with the overarching goals of supporting scientific research and affecting government policy.
+### Greenaware, is concerned with the climate changes caused by Global Warming.  
+
+##### Greenaware’s mission is to collect data to improve awareness and drive predictive modelling initiatives with the overarching goals of supporting scientific research and affecting government policy.
 
 Greenaware’s services will allow climate-change conscious individuals and groups around the Earth to register 
 and contribute by providing climate readings and observations related to their local regions at intervals. 
