@@ -23,7 +23,6 @@ class Observer(db.Model):
         return {
             'id': self.id,
             'username': self.username,
-            'password': self.password,
             'user_role': self.user_role
         }
 

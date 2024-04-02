@@ -1,5 +1,6 @@
 import jwt, os
-from models import Observer  
+from models import Observer 
+from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity, jwt_required 
 
 def verify_access_token(access_token):
     try:
@@ -20,3 +21,9 @@ def verify_access_token(access_token):
 
     except jwt.InvalidTokenError:
         return None
+
+def verify_observer():
+    #check if authenticated
+    current_user = get_jwt_identity()
+    if not current_user:
+        return jsonify({'message': 'Unauthorized'}), 403

@@ -11,7 +11,7 @@ from utils.verification import verify_access_token
 from jwt import encode
 from flask import request, jsonify
 from datetime import datetime, timedelta
-from flask_jwt_extended import jwt_required, create_access_token
+from flask_jwt_extended import create_access_token, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -60,13 +60,14 @@ def login():
             return jsonify({'message': 'Invalid username or password'}), 401
 
         # Generate JWT token
-        payload = {
-            'user': observer.username,
-            'exp': datetime.utcnow() + timedelta(hours=1)  # Token expiration time
-        }
-        token = jwt.encode(payload, os.getenv('ACCESS_TOKEN_KEY'), algorithm='HS256')
+        access_token = create_access_token(identity=username)
+        return jsonify({
+            'Message': f'Hi {username}, Welcome Back!!', 
+            'access_token': access_token,
+            'status_code': 200}
+            ), 200
 
-        return jsonify({'username':username,'access_token': token}), 200
+        response.set_cookie('access_token', access_token)
 
     except Exception as e:
         return jsonify({'message': str(e)}), 500
@@ -75,5 +76,13 @@ def login():
 
 # __________________ SEE LIST OF ALL OBSERVERS
 def get_observers():
+    current_user = get_jwt_identity()
+    if not current_user:
+        return jsonify({'message': 'Unauthorized'}), 403
+
+    observer = Observer.query.filter_by(username=current_user).first()
+    if observer.user_role is not 'admin':
+        return jsonify({'message': 'You are not an admin'}), 403
+
     observers = Observer.query.all()
     return jsonify([observer.to_dict() for observer in observers])

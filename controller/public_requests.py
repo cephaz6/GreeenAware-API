@@ -1,7 +1,6 @@
 #Imports from other files
-from models import db, City, Observation, Weather
+from models import db, Observation
 from utils.error_handler import *
-from utils.verification import verify_access_token
 from utils.api_key_checker import check_api_key
 
 

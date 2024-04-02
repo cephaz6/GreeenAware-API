@@ -7,12 +7,18 @@ from utils.error_handler import handle_not_found_error, handle_internal_server_e
 # Dependencies Imports from libraries
 from flask import request, jsonify
 from datetime import datetime
+from flask_jwt_extended import get_jwt_identity
 
 
 #_____________________ ADD OBSERVATION CONTOLLER
 def add_observation():
     try:
-        # Extract observation data from request
+        #check if authenticated
+        current_user = get_jwt_identity()
+
+        if not current_user:
+            return jsonify({'message': 'Unauthorized'}), 403
+
         data = request.json
 
         # Check if the city name exists in the cities table
@@ -57,5 +63,11 @@ def add_observation():
 
 # ____________________________________GET ALL OBSERVATIONS
 def get_observations():
+    #check if authenticated
+    current_user = get_jwt_identity()
+
+    if not current_user:
+        return jsonify({'message': 'Unauthorized'}), 403
+        
     observations = Observation.query.all()
     return jsonify([observations.to_dict() for observations in observations])

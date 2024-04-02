@@ -1,5 +1,0 @@
-Flask
-flask_sqlalchemy
-flask_jwt_extended
-python-dotenv
-flask_migrate
