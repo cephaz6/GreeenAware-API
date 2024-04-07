@@ -4,3 +4,6 @@ flask_jwt_extended
 python-dotenv
 flask_migrate
 what3words
+marshmallow
+flask-marshmallow
+marshmallow-sqlalchemy

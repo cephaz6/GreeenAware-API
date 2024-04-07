@@ -48,7 +48,7 @@ def observer_login():
     return login()
 
 @router.route('/get-observers', methods=['GET'])
-@jwt_required()   
+# @jwt_required()   
 def get_all_observers():
     return get_observers()
 
@@ -81,6 +81,11 @@ def city_delete(id):
 @jwt_required()   
 def add_new_observation():
     return add_observation()
+
+@router.route('/add-bulk-observation', methods=['POST'])
+@jwt_required()   
+def bulk_observation():
+    return add_bulk_observation()
 
 @router.route('/get-observations', methods=['GET'])
 @jwt_required()   

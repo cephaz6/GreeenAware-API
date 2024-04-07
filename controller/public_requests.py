@@ -1,5 +1,5 @@
 #Imports from other files
-from models import db, Observation
+from models import db, Observation, City
 from utils.error_handler import *
 from utils.api_key_checker import check_api_key
 
@@ -11,9 +11,6 @@ from flask import request, jsonify
 #______________________________________________GET OBSERVATION BY CITY NAME
 def get_observations_by_city():
     try:
-        
-        # print(api_key)
-        # print(city_name)
 
         # Proceed with further processing for getting observations
         city_name = request.args.get('city_name')

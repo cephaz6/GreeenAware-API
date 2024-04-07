@@ -28,7 +28,7 @@ def add_observation():
         date = datetime.strptime(data['date'], "%Y-%m-%d").date()
         time = datetime.strptime(data['time'], "%H:%M:%S").time()
 
-        w3w_address = get_w3w_address(data['longitude'], data['latitude'])
+        w3w_address = get_w3w_address(data['latitude'], data['longitude'])
 
         # Create a new observation object
         new_observation = Observation(
@@ -58,6 +58,63 @@ def add_observation():
         return jsonify({'message': str(e)}), 500
 
 
+#_____________________ ADD BULK OBSERVATION CONTOLLER
+def add_bulk_observation():
+    try:
+        #check if authenticated
+        verify_observer()
+
+        # Get the list of observations from the request body
+        observations = request.json.get('observations')
+        
+        if not observations:
+            return jsonify({'message': 'No observations provided in the request'}), 400
+
+         # Iterate over each observation and add it to the database
+        for data in observations:
+
+            city = City.query.filter_by(city=data.get('city_name')).first()
+
+            if not city:
+                # Return a JSON response indicating that the city was not found
+                return jsonify({'message': 'City not found for observation: {}'.format(observation_data['city_name'])}), 404
+
+            w3w_address = get_w3w_address(data.get('latitude'), data.get('longitude'))
+
+            # Convert date and time strings to datetime objects
+            date = datetime.strptime(data.get('date'), "%Y-%m-%d").date()
+            time = datetime.strptime(data.get('time'), "%H:%M:%S").time()
+
+            # Create a new Observation object
+            observation = Observation(
+                date=date,
+                temperature=time,
+                temperature_land_surface=data.get('temperature_land_surface'),
+                temperature_sea_surface=data.get('temperature_sea_surface'),
+                humidity=data.get('humidity'),
+                wind_speed=data.get('wind_speed'),
+                wind_direction=data.get('wind_direction'),
+                precipitation=data.get('precipitation'),
+                haze=data.get('haze'),
+                city_name=data.get('city_name'),
+                weather_id=data.get('weather_id'),
+                w3w_address = w3w_address,
+                longitude=data.get('longitude'),
+                latitude=data.get('latitude')
+            )
+            
+            # Add the observation to the database session
+            db.session.add(observation)
+
+        #Commit all the changes to the database
+        db.session.commit()
+
+        return jsonify({'message': 'Bulk Observations added successfully'}), 201
+
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+
+
 
 # ____________________________________GET ALL OBSERVATIONS
 def get_observations():
@@ -70,8 +127,7 @@ def get_observations():
     observations = Observation.query.all()
     return jsonify([observations.to_dict() for observations in observations])
 
-
-#_______________________________________UPDATE OBSERVATION
+#_______________________________________                                                UPDATE OBSERVATION
 def update_observation(id):
 
     verify_observer()

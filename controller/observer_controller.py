@@ -5,6 +5,7 @@ import jwt
 from models import db, Observer
 from utils.error_handler import handle_not_found_error, handle_internal_server_error
 from utils.verification import verify_access_token
+from schemas import ObserverSchema
 
 
 # Dependencies Imports from libraries
@@ -50,7 +51,12 @@ def login():
 
         # Validate username and password
         if not username or not password:
-            return jsonify({'message': 'Username and password are required'}), 400
+            return jsonify(
+                {
+                    'message': 'Username and password Not Available',
+                    'status_code': 400
+                }
+                ), 400
 
         # Retrieve observer from database
         observer = Observer.query.filter_by(username=username).first()
@@ -82,8 +88,11 @@ def get_observers():
         return jsonify({'message': 'Unauthorized'}), 403
 
     observer = Observer.query.filter_by(username=current_user).first()
-    if observer.user_role is not 'admin':
-        return jsonify({'message': 'You are not an admin'}), 403
+    # if observer.user_role is not 'observer':
+    #     return jsonify({'message': 'You are not an admin'}), 403
 
     observers = Observer.query.all()
+    # observer_schema = ObserverSchema()
+    # result = observer_schema.dump(observer)
+    # return jsonify(result), 200
     return jsonify([observer.to_dict() for observer in observers])
