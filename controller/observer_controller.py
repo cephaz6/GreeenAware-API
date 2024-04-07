@@ -88,8 +88,8 @@ def get_observers():
         return jsonify({'message': 'Unauthorized'}), 403
 
     observer = Observer.query.filter_by(username=current_user).first()
-    # if observer.user_role is not 'observer':
-    #     return jsonify({'message': 'You are not an admin'}), 403
+    if observer.user_role is not 'observer':
+        return jsonify({'message': 'You are not an admin'}), 403
 
     observers = Observer.query.all()
     # observer_schema = ObserverSchema()

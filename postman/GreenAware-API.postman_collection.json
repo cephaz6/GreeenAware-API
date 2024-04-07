@@ -5,14 +5,14 @@
 		"description": "This is the Web API tester from postman",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "24880301",
-		"_collection_link": "https://grey-resonance-443074.postman.co/workspace/0485f65f-8328-49ea-b561-1a467a83b445/collection/24880301-549cdeed-2c7d-4fcc-813b-8fb6aa811178?action=share&source=collection_link&creator=24880301"
+		"_collection_link": "https://grey-resonance-443074.postman.co/workspace/New-Team-Workspace~0485f65f-8328-49ea-b561-1a467a83b445/collection/24880301-549cdeed-2c7d-4fcc-813b-8fb6aa811178?action=share&source=collection_link&creator=24880301"
 	},
 	"item": [
 		{
 			"name": "CITIES",
 			"item": [
 				{
-					"name": "CREATE CITY",
+					"name": "ADD CITY",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -355,72 +355,6 @@
 			]
 		},
 		{
-			"name": "OBSERVATIONS",
-			"item": [
-				{
-					"name": "CREATE OBSERVATION",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"date\": \"2024-03-15\",\r\n    \"time\": \"12:00:00\",\r\n    \"temperature_land_surface\": 22.8,\r\n    \"temperature_sea_surface\": 17.3,\r\n    \"humidity\": 69.8,\r\n    \"wind_speed\": 13.7,\r\n    \"wind_direction\": 250,\r\n    \"precipitation\": 1.5,\r\n    \"haze\": 22,\r\n    \"city_name\": \"Liverpool\",\r\n    \"weather_id\": 6,\r\n    \"longitude\": -3.0167,\r\n    \"latitude\": 53.4667  \r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/add-observation",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"add-observation"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "VIEW ALL OBSERVATIONS",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/get-observations",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"get-observations"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "CITY ALL - OBSs",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}all-observations/city_name=London&api_key=495f4901ef773c5e8433e396988ff348",
-							"host": [
-								"{{url}}all-observations"
-							],
-							"path": [
-								"city_name=London&api_key=495f4901ef773c5e8433e396988ff348"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"description": "This folder contains endpoints Used by OBSERVER to manage observations"
-		},
-		{
 			"name": "PUBLIC REQUESTS (GET OBS)",
 			"item": [
 				{
@@ -581,6 +515,98 @@
 				}
 			],
 			"description": "This folder contains endpoints or http request samples used by end users to access Existing weather Observations"
+		},
+		{
+			"name": "OBSERVATIONS",
+			"item": [
+				{
+					"name": "CREATE OBSERVATION",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"date\": \"2024-03-15\",\r\n    \"time\": \"12:00:00\",\r\n    \"temperature_land_surface\": 22.8,\r\n    \"temperature_sea_surface\": 17.3,\r\n    \"humidity\": 69.8,\r\n    \"wind_speed\": 13.7,\r\n    \"wind_direction\": 250,\r\n    \"precipitation\": 1.5,\r\n    \"haze\": 22,\r\n    \"city_name\": \"Liverpool\",\r\n    \"weather_id\": 6,\r\n    \"longitude\": -3.0167,\r\n    \"latitude\": 53.4667  \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/add-observation",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"add-observation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BULK ADD OBSERVATIONS",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"date\": \"2024-03-15\",\r\n    \"time\": \"12:00:00\",\r\n    \"temperature_land_surface\": 22.8,\r\n    \"temperature_sea_surface\": 17.3,\r\n    \"humidity\": 69.8,\r\n    \"wind_speed\": 13.7,\r\n    \"wind_direction\": 250,\r\n    \"precipitation\": 1.5,\r\n    \"haze\": 22,\r\n    \"city_name\": \"Liverpool\",\r\n    \"weather_id\": 6,\r\n    \"longitude\": -3.0167,\r\n    \"latitude\": 53.4667  \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/add-observation",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"add-observation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "VIEW ALL OBSERVATIONS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/get-observations",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"get-observations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CITY ALL - OBSs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}all-observations/city_name=London&api_key=495f4901ef773c5e8433e396988ff348",
+							"host": [
+								"{{url}}all-observations"
+							],
+							"path": [
+								"city_name=London&api_key=495f4901ef773c5e8433e396988ff348"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "This folder contains endpoints Used by OBSERVER to manage observations"
 		},
 		{
 			"name": "HomePage",

@@ -44,7 +44,6 @@ def get_observations_by_city():
                     'description': observation.weather.description
                 }
             }
-
             return jsonify(observation_data), 200
         else:
             return jsonify({'message': 'Observation not found for city: {}'.format(city_name)}), 404
