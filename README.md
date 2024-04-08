@@ -12,49 +12,51 @@ Registered contributors, termed ‘Observers’ will first have to complete an o
 
 ### Features:
 
-.Secure access using JSON Web Tokens (JWT).
-.Standard HTTP methods (GET, POST, etc.) for interoperability.
-.Observation data retrieval with filtering capabilities (date, location, etc.).
-.Support for various observation parameters:.
-+Date (ISO 8601 format)+
-+Time (ISO 8601 format)+
-+Timezone offset (ISO 8601 format)+
-+Location (What3words address)+
-+Temperature (land & sea surface)+
-+Humidity+
-+Wind speed & direction.+
-+Precipitation+
-+Haze+
-+Notes+
+1. Secure access using JSON Web Tokens (JWT).
+2. Standard HTTP methods (GET, POST, etc.) for interoperability.
+3. Observation data retrieval with filtering capabilities (date, location, etc.).
+4. Support for various observation parameters:
+   > - Date (ISO 8601 format)
+   > - Time (ISO 8601 format)
+   > - Timezone offset (ISO 8601 format)
+   > - Location (What3words address)
+   > - Temperature (land & sea surface)
+   > - Humidity
+   > - Wind speed & direction
+   > - Precipitation
+   > - Haze
+   > - Notes
 
 ### Requirements:
 
-.Python 3.x.
-.Flask.
-.flask_sqlalchemy.
-.flask_jwt_extended.
-.python-dotenv.
-.flask_migrate.
-.what3words.
-.marshmallow.
-.flask-marshmallow.
-.marshmallow-sqlalchemy.
+1. Python 3.x
+2. Flask
+3. flask_sqlalchemy
+4. flask_jwt_extended
+5. python-dotenv
+6. flask_migrate
+7. what3words
+8. marshmallow
+9. flask-marshmallow
+10. marshmallow-sqlalchemy
 
 ### Installation:
 
-.Clone this repository.
-.Install required dependencies: pip install -r requirements.txt.
-.Configure database connection details in the application configuration file (config.py).
-.Run the API server: python api.py.
+1. Clone this repository.
+2. Install required dependencies: pip install -r requirements.txt.
+3. Configure database connection details in the application configuration file (config.py).
+4. Run the API server: python api.py.
 
 ### Usage:
 
-.Subscribe to Greenaware's data access service.
-.Obtain a JWT token through the Greenaware website.
-.Include the JWT token in the authorization header of API requests.
-API Endpoints:
-‘/observations’: Retrieves observation data based on query parameters (e.g., date range, location).
-‘/observations/<<observation_id>>’: Retrieves a specific observation by its ID.
+1. Subscribe to Greenaware's data access service.
+2. Obtain a JWT token through the Greenaware website.
+3. Include the JWT token in the authorization header of API requests.
+
+### API Endpoints:
+
+/observations: Retrieves observation data based on query parameters (e.g., date range, location).
+/observations/<observation_id>: Retrieves a specific observation by its ID.
 
 ### Data Access:
 
