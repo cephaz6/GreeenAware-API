@@ -133,7 +133,13 @@ def update_observation(id):
     verify_observer()
 
     observation = Observation.query.get_or_404(id)
+    
     data = request.json
+
+    observation_year = data['date'].year
+    observation_quarter = (data['date'].month - 1) // 3 + 1
+    
+    check_observation_quarter(observation_year, observation_quarter)
 
     for field in ['temperature_land_surface', 'temperature_sea_surface', 'humidity', 'wind_speed', 'wind_direction', 'precipitation', 'haze']:
         if field in data:

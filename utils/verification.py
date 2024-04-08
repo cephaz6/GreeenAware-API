@@ -1,5 +1,6 @@
 import jwt, os
 from models import Observer 
+from datetime import datetime
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity, jwt_required 
 
 def verify_access_token(access_token):
@@ -27,3 +28,16 @@ def verify_observer():
     current_user = get_jwt_identity()
     if not current_user:
         return jsonify({'message': 'Unauthorized'}), 403
+
+#this basically gets the current year quarter
+def get_current_quarter():
+    now = datetime.now()
+    quarter = (now.month - 1) // 3 + 1
+    return now.year, quarter
+
+def check_observation_quarter(observation_year, observation_quarter):
+    current_year, current_quarter = get_current_quarter()
+
+    if (observation_year, observation_quarter) < (current_year, current_quarter):
+        # Observation is before the current quarter, reject the request
+        return {'error': 'Amendment to observations prior to the current quarter is restricted'}, 403
