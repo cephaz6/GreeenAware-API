@@ -56,6 +56,7 @@ Registered contributors, termed ‘Observers’ will first have to complete an o
 ### API Endpoints:
 
 /observations: Retrieves observation data based on query parameters (e.g., date range, location).
+
 /observations/<observation_id>: Retrieves a specific observation by its ID.
 
 ### Data Access:
