@@ -127,6 +127,7 @@ def get_observations():
     observations = Observation.query.all()
     return jsonify([observations.to_dict() for observations in observations])
 
+
 #_______________________________________                                                UPDATE OBSERVATION
 def update_observation(id):
 
@@ -134,14 +135,14 @@ def update_observation(id):
 
     observation = Observation.query.get_or_404(id)
     
+    observation_year = observation.date.year
+    observation_quarter = observation.date.month
+
+    #restrict any attempted amendments to observations prior to the current quarter.
+    if check_observation_quarter(observation_year, observation_quarter) == False:
+        return {'error': 'Amendment to observations prior to the current quarter is restricted'}, 403  
+
     data = request.json
-
-    observation_year = data['date']
-    print(observation_year)
-    # observation_quarter = (data['date'].month - 1) // 3 + 1
-    
-    # check_observation_quarter(observation_year, observation_quarter)
-
     for field in ['temperature_land_surface', 'temperature_sea_surface', 'humidity', 'wind_speed', 'wind_direction', 'precipitation', 'haze']:
         if field in data:
             setattr(observation, field, data[field])

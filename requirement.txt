@@ -7,3 +7,4 @@ what3words
 marshmallow
 flask-marshmallow
 marshmallow-sqlalchemy
+requests

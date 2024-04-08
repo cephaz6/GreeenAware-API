@@ -41,4 +41,4 @@ def check_observation_quarter(observation_year, observation_quarter):
 
     if (observation_year, observation_quarter) < (current_year, current_quarter):
         # Observation is before the current quarter, reject the request
-        return {'error': 'Amendment to observations prior to the current quarter is restricted'}, 403
+        return False  
