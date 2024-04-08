@@ -35,6 +35,7 @@ def get_current_quarter():
     quarter = (now.month - 1) // 3 + 1
     return now.year, quarter
 
+#observations prior to the current quarter restricter
 def check_observation_quarter(observation_year, observation_quarter):
     current_year, current_quarter = get_current_quarter()
 
