@@ -1,5 +1,5 @@
 """
-Name: Chris Emetor; Iheke; Ose Cephas
+Name: Chris Emetoh; Iheke; Ose Cephas
 Date: 28/03/2024
 This is the main controller file: Others are in the 'controller directory'
 """

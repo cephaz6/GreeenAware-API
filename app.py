@@ -1,5 +1,5 @@
 """
-Name: Chris Emetor
+Name: Chris Emetoh
 Name: Iheke
 Name: Ose Cephas
 Date: 23/03/2024
@@ -8,10 +8,9 @@ Objective: Building GreenAware Api Using Flask
 
 # App Dependencies
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from models import db
 from dotenv import load_dotenv
-from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
+from flask_jwt_extended import JWTManager
 import os
 
 # Load environment variables
