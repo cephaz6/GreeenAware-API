@@ -15,10 +15,16 @@
 					"name": "ADD CITY",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMjE3NzY4NSwianRpIjoiZGZlNzNkYmItYmQxMS00ZDA2LWI0N2EtMTZmZjBhNTc4MzE0IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImNocmlzIiwibmJmIjoxNzEyMTc3Njg1LCJjc3JmIjoiOGVjZWQ4MjAtZDliNC00NDcxLTgwZmQtMWMzZTEwODQ3NmE5IiwiZXhwIjoxNzEyMTc4NTg1fQ.UDL4qDctNomhWa2x_l9rGbPECPZzwJ6Rl0gKMqwZo74",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"city\": \"Manchester\",\r\n    \"country\": \"United Kingdom\",\r\n    \"timezone_offset\": \"GMT+0\"\r\n}",
+							"raw": "{\r\n    \"city\": \"Bury\",\r\n    \"country\": \"United Kingdom\",\r\n    \"timezone_offset\": \"GMT+0\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -190,7 +196,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"chris\",\r\n    \"password\": \"chris\"\r\n}",
+							"raw": "{\r\n    \"username\": \"chris\",\r\n    \"password\": \"chris\" \r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -355,8 +361,61 @@
 			]
 		},
 		{
-			"name": "PUBLIC REQUESTS (GET OBS)",
+			"name": "PUBLIC USERS",
 			"item": [
+				{
+					"name": "USERS SIGNUP",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"chris\",\r\n    \"password\": \"chris\",\r\n    \"email_address\": \"chris@gmail.com\",\r\n    \"first_name\": \"Chris\",\r\n    \"last_name\": \"Emetoh\",\r\n    \"api_key\": \"\",\r\n    \"subscription_type\": \"Basic\",\r\n    \"account_type\": \"personal\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/observer-signup",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"observer-signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE USER",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"Chris\",\r\n    \"last_name\": \"Emetoh\",\r\n    \"subscription_type\": \"Basic\",\r\n    \"account_type\": \"personal\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/update/chris",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"update",
+								"chris"
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "BY CITY NAME",
 					"event": [
@@ -512,6 +571,71 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "USER LOGIN",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var template = `",
+									"<style type=\"text/css\">",
+									"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}",
+									"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}",
+									"    .tftable tr {background-color:#ffffff;}",
+									"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}",
+									"    .tftable tr:hover {background-color:#e0ffff;}",
+									"</style>",
+									"",
+									"<table class=\"tftable\" border=\"1\">",
+									"    <tr>",
+									"        <th>ID</th>",
+									"        <th>Username</th>",
+									"        <th>Password</th>",
+									"    </tr>",
+									"    <tr>",
+									"        <td>{{response.id}}</td>",
+									"        <td>{{response.username}}</td>",
+									"        <td>{{response.password}}</td>",
+									"    </tr>",
+									"</table>",
+									"`;",
+									"",
+									"function constructVisualizerPayload() {",
+									"    return {response: pm.response.json()}",
+									"}",
+									"",
+									"pm.visualizer.set(template, constructVisualizerPayload());"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"chris\",\r\n    \"password\": \"chris\" \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/observer-login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"observer-login"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"description": "This folder contains endpoints or http request samples used by end users to access Existing weather Observations"
@@ -540,6 +664,39 @@
 							],
 							"path": [
 								"add-observation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE OBSERVATION",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxMjU0NjUzMiwianRpIjoiYmYyODY4YmMtMGZkYi00NTJhLWJlYzMtZTg4MmE2MjA5ZGIwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImNocmlzIiwibmJmIjoxNzEyNTQ2NTMyLCJjc3JmIjoiNDViMTFkZmItMTZkMC00MWE2LTk0NzAtMGVhYWIzMjU4MGY0IiwiZXhwIjoxNzEyNTQ3NDMyfQ.N04Ijg-DTzE6MaLFdY1wPgbVGZrzeyWyeX1hpxHlNRY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"temperature_land_surface\": 22.8,\r\n    \"temperature_sea_surface\": 17.3,\r\n    \"humidity\": 69.8,\r\n    \"wind_speed\": 13.7,\r\n    \"wind_direction\": 250,\r\n    \"precipitation\": 1.5,\r\n    \"haze\": 22 \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/update-observations/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"update-observations",
+								"1"
 							]
 						}
 					},
