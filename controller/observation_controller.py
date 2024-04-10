@@ -2,7 +2,7 @@
 from models import db, City, Observation
 from utils.w3w_generator import get_w3w_address
 from utils.verification import *
-from utils.error_handler import handle_not_found_error, handle_internal_server_error
+from utils.error_handler import *
 
 
 # Dependencies Imports from libraries

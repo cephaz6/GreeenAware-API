@@ -1,5 +1,5 @@
 #Imports from other files
-from models import db, Observation, City
+from models import db, Observation, City, User
 from utils.error_handler import *
 from utils.api_key_checker import check_api_key
 
@@ -50,3 +50,4 @@ def get_observations_by_city():
 
     except Exception as e:
         return jsonify({'message': str(e)}), 500
+

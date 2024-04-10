@@ -36,6 +36,18 @@ def get_observation():
         
     return get_observations_by_city()
 
+# @router.route('/signup', methods=['POST'])
+# def public_signup():
+#     return user_signup()
+
+# @router.route('/login', methods=['POST'])
+# def public_login():
+#     return user_login()
+
+# @router.route('/profile-update', methods=['PUT'])
+# def public_update():
+#     return user_update()
+
 
 #_________________________________________________________________________
 #________________________________________________________ OBSERVER ROUTES
@@ -48,7 +60,7 @@ def observer_login():
     return login()
 
 @router.route('/get-observers', methods=['GET'])
-# @jwt_required()   
+@jwt_required()   
 def get_all_observers():
     return get_observers()
 

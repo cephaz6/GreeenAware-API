@@ -3,14 +3,14 @@ import jwt
 
 #Imports from other files
 from models import db, Observer
-from utils.error_handler import handle_not_found_error, handle_internal_server_error
-from utils.verification import verify_access_token
+from utils.error_handler import *
+from utils.verification import *
 from schemas import ObserverSchema
 
 
 # Dependencies Imports from libraries
 from jwt import encode
-from flask import request, jsonify
+from flask import request, jsonify, make_response
 from datetime import datetime, timedelta
 from flask_jwt_extended import create_access_token, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -65,16 +65,19 @@ def login():
         if not observer or not check_password_hash(observer.password, password):
             return jsonify({'message': 'Invalid username or password'}), 401
 
-        # Generate JWT token
+         # Generate JWT token
         access_token = create_access_token(identity=username)
-        return jsonify({
-            'Message': f'Hi {username}, Welcome Back!!', 
-            'access_token': access_token,
-            'status_code': 200}
-            ), 200
 
-        # response.headers['Authorization'] = 'Bearer ' + access_token
-        # response.set_cookie('access_token', access_token)
+        # Create a response with the access token as a cookie
+        response = make_response(jsonify({
+            'message': f'Hi {username}, Welcome Back!',
+            # 'access_token': access_token,
+            'status_code': 200
+        }))
+        response.headers['Authorization'] = 'Bearer ' + access_token  # Add access token to Authorization header
+        response.set_cookie('access_token', access_token, httponly=True, max_age=1800)  # Set cookie with a timeout of 30 minutes
+
+        return response
 
     except Exception as e:
         return jsonify({'message': str(e)}), 500

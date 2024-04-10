@@ -125,3 +125,47 @@ class Weather(db.Model):
             'main': self.main,
             'description': self.description
         }
+
+
+class User(db.Model):
+    __tablename__ = 'users'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_key = db.Column(db.String(100), unique=True, nullable=False)
+    username = db.Column(db.String(100), unique=True, nullable=False)
+    first_name = db.Column(db.String(100), nullable=False)
+    last_name = db.Column(db.String(100), nullable=False)
+    email_address = db.Column(db.String(100), unique=True, nullable=False)
+    password_hash = db.Column(db.String(100), nullable=False)
+    api_key = db.Column(db.String(100), unique=True, nullable=False)
+    subscription_type = db.Column(db.String(100), nullable=True)
+    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
+
+    def __init__(self, username, first_name, last_name, email_address, password, api_key, subscription_type=None):
+        self.username = username
+        self.first_name = first_name
+        self.last_name = last_name
+        self.email_address = email_address
+        self.set_password(password)
+        self.api_key = api_key
+        self.subscription_type = subscription_type
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'email_address': self.email_address,
+            'api_key': self.api_key,
+            'subscription_type': self.subscription_type,
+            'date_created': str(self.date_created),
+            'date_modified': str(self.date_modified)
+        }
