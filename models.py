@@ -1,6 +1,10 @@
 from flask_sqlalchemy import SQLAlchemy
+<<<<<<< HEAD
 from werkzeug.security import check_password_hash
 from datetime import datetime
+=======
+from werkzeug.security import check_password_hash, generate_password_hash
+>>>>>>> 6ca388604747902004831accef22f6b7ac9aa2a0
 
 db = SQLAlchemy()
 
