@@ -2,7 +2,7 @@ import os
 import jwt
 
 #Imports from other files
-from models import db, Weather, Observer
+from models import db, Weather
 from utils.error_handler import handle_not_found_error, handle_internal_server_error
 from utils.verification import *
 
@@ -15,8 +15,12 @@ from flask import request, jsonify
 def get_weather():
     verify_observer()
 
-    weather = Weather.query.all()
-    return jsonify([weather.to_dict() for weather in weather])
+    # Query all weather objects
+    weather_objects = Weather.query.all()
+    weather_dicts = [weather.to_dict() for weather in weather_objects]
+
+    # Return JSON response with list of dictionaries
+    return jsonify(weather_dicts), 200
 
 # ____________________________________OBSERVER ADD A NEW WEATHER
 def add_weather():

@@ -8,3 +8,4 @@ marshmallow
 flask-marshmallow
 marshmallow-sqlalchemy
 requests
+email-validator

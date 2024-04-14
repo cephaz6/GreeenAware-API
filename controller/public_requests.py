@@ -1,7 +1,6 @@
 #Imports from other files
-from models import db, Observation, City, User
+from models import db, Observation
 from utils.error_handler import *
-from utils.api_key_checker import check_api_key
 
 
 # Dependencies Imports from libraries
@@ -11,12 +10,11 @@ from flask import request, jsonify
 #______________________________________________GET OBSERVATION BY CITY NAME
 def get_observations_by_city():
     try:
-
-        # Proceed with further processing for getting observations
+        # Extract city name from request query parameters
         city_name = request.args.get('city_name')
-        
+
         # Query the database for the observation with the specified city name
-        observation = Observation.query.join(City).filter(City.city == city_name).first()
+        observation = Observation.query.filter_by(city_name=city_name).first()
 
         # Check if the observation exists
         if observation:
@@ -32,9 +30,9 @@ def get_observations_by_city():
                 'precipitation': observation.precipitation,
                 'haze': observation.haze,
                 'location': {
-                    'city': observation.city.city,
-                    'country': observation.city.country,
-                    'timezone_offset': observation.city.timezone_offset,
+                    'city': observation.city_name,
+                    'country': observation.country,
+                    'timezone_offset': observation.timezone_offset,
                     'longitude': observation.longitude,
                     'latitude': observation.latitude,
                     'what3words': observation.w3w_address,
@@ -46,8 +44,7 @@ def get_observations_by_city():
             }
             return jsonify(observation_data), 200
         else:
-            return jsonify({'message': 'Observation not found for city: {}'.format(city_name)}), 404
+            return jsonify({'message': f'Observation not found for city: {city_name}', 'status_code': 404}), 404
 
     except Exception as e:
-        return jsonify({'message': str(e)}), 500
-
+        return jsonify({'message': str(e), 'status_code': 500}), 500

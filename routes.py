@@ -1,7 +1,6 @@
 from flask import Blueprint
 from controllers import *
 
-from controller.city_controller import *
 from controller.observation_controller import *
 from controller.observer_controller import *
 from controller.public_requests import *
@@ -17,6 +16,11 @@ router = Blueprint('router', __name__)
 @router.route('/', methods=['GET'])
 def homepage():
     return index()
+
+
+# @router.route('/w3w', methods=['GET'])
+# def homepag():
+#     return get_w3w_info()
 
 """ 
 Public API USERS request - This requires a validation of the api-key of the request
@@ -36,26 +40,13 @@ def get_observation():
         
     return get_observations_by_city()
 
-# @router.route('/signup', methods=['POST'])
-# def public_signup():
-#     return user_signup()
-
-# @router.route('/login', methods=['POST'])
-# def public_login():
-#     return user_login()
-
-# @router.route('/profile-update', methods=['PUT'])
-# def public_update():
-#     return user_update()
-
-
 #_________________________________________________________________________
 #________________________________________________________ OBSERVER ROUTES
-@router.route('/observer-signup', methods=['POST'])
+@router.route('/signup', methods=['POST'])
 def observer_signup():
     return signup()
 
-@router.route('/observer-login', methods=['POST'])
+@router.route('/login', methods=['POST'])
 def observer_login():
     return login()
 
@@ -64,27 +55,6 @@ def observer_login():
 def get_all_observers():
     return get_observers()
 
-#_________________________________________________________________________
-#_____________________________________________________  CITIES ROUTES
-@router.route('/cities', methods=['POST'])
-@jwt_required()
-def add_city_route():
-    return add_city()
-
-@router.route('/cities', methods=['GET'])
-@jwt_required() 
-def view_city():
-    return view_cities()
-
-@router.route('/update-city/<int:id>', methods=['PATCH'])
-@jwt_required() 
-def city_update(id):
-    return update_city(id)
-
-@router.route('/delete-city/<int:id>', methods=['DELETE'])
-@jwt_required() 
-def city_delete(id):
-    return delete_city(id)
 
 #_________________________________________________________________________
 #_____________________________________________________ OBSERVATION ROUTES
@@ -94,10 +64,10 @@ def city_delete(id):
 def add_new_observation():
     return add_observation()
 
-@router.route('/add-bulk-observation', methods=['POST'])
+@router.route('/add-bulk-observations', methods=['POST'])
 @jwt_required()   
 def bulk_observation():
-    return add_bulk_observation()
+    return add_bulk_observations()
 
 @router.route('/get-observations', methods=['GET'])
 @jwt_required()   

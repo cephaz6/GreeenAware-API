@@ -1,6 +1,6 @@
 #Imports from other files
-from models import db, City, Observation
-from utils.w3w_generator import get_w3w_address
+from models import db, Observation, User
+from utils.w3w_generator import *
 from utils.verification import *
 from utils.error_handler import *
 
@@ -11,108 +11,128 @@ from datetime import datetime
 from flask_jwt_extended import get_jwt_identity
 
 
-#_____________________ ADD OBSERVATION CONTOLLER
+#_____________________ ADD OBSERVATION CONTROLLER
 def add_observation():
     try:
-        #check if authenticated
+        # Check if authenticated
         verify_observer()
 
-        data = request.json
+        current_user = get_jwt_identity()
+        user = User.query.filter_by(email=current_user).first()
 
-        # Check if the city name exists in the cities table
-        city = City.query.filter_by(city=data['city_name']).first()
-        if not city:
-            return jsonify({'message': 'City not found'}), 404
+        data = request.json
 
         # Convert date and time strings to datetime objects
         date = datetime.strptime(data['date'], "%Y-%m-%d").date()
         time = datetime.strptime(data['time'], "%H:%M:%S").time()
 
-        w3w_address = get_w3w_address(data['latitude'], data['longitude'])
+        # Generate what3words address based on latitude and longitude
+        if not data.get('w3w_address'):
+            return jsonify({'message': 'Please provide a W3W address'}), 400
+        
+        w3w_info = get_w3w_info(data['w3w_address'])
+
+        coordinates = w3w_info["coordinates"]
 
         # Create a new observation object
         new_observation = Observation(
             date=date,
             time=time,
+            observer_id = user.user_id,
             temperature_land_surface=data['temperature_land_surface'],
             temperature_sea_surface=data['temperature_sea_surface'],
+            timezone_offset=data['timezone_offset'],
             humidity=data['humidity'],
             wind_speed=data['wind_speed'],
             wind_direction=data['wind_direction'],
             precipitation=data['precipitation'],
             haze=data['haze'],
-            city_name=data['city_name'],
             weather_id=data['weather_id'],
-            w3w_address = w3w_address,
-            longitude=data['longitude'],
-            latitude=data['latitude']
+            country =  w3w_info["country"],
+            w3w_address=data['w3w_address'],
+            city_name= w3w_info["nearest_place"],
+            longitude=coordinates["lng"],
+            latitude=coordinates['lat']
         )
 
         # Add the new observation to the database
         db.session.add(new_observation)
         db.session.commit()
 
-        return jsonify({'message': 'Observation added successfully'}), 201
+        return jsonify({'message': 'Observation added successfully', 'status_code': 201}), 201
 
     except Exception as e:
-        return jsonify({'message': str(e)}), 500
+        return jsonify({'message': str(e), 'status_code': 500}), 500
 
 
-#_____________________ ADD BULK OBSERVATION CONTOLLER
-def add_bulk_observation():
+#_____________________ ADD BULK OBSERVATION CONTROLLER
+def add_bulk_observations():
     try:
-        #check if authenticated
+        # Check if authenticated
         verify_observer()
 
-        # Get the list of observations from the request body
-        observations = request.json.get('observations')
+        current_user = get_jwt_identity()
+        user = User.query.filter_by(email=current_user).first()
+
+        data = request.json
         
-        if not observations:
-            return jsonify({'message': 'No observations provided in the request'}), 400
-
-         # Iterate over each observation and add it to the database
-        for data in observations:
-
-            city = City.query.filter_by(city=data.get('city_name')).first()
-
-            if not city:
-                # Return a JSON response indicating that the city was not found
-                return jsonify({'message': 'City not found for observation: {}'.format(observation_data['city_name'])}), 404
-
-            w3w_address = get_w3w_address(data.get('latitude'), data.get('longitude'))
-
+        # Check if observations key exists in the JSON data
+        if 'observations' not in data:
+            return jsonify({'message': 'No observations found in the request data'}), 400
+        
+        # Extract observations from the JSON data
+        observations = data['observations']
+        
+        # Check if observations is a list
+        if not isinstance(observations, list):
+            return jsonify({'message': 'Observations must be provided as a list'}), 400
+        
+        # Iterate over each observation in the list
+        for obs_data in observations:
             # Convert date and time strings to datetime objects
-            date = datetime.strptime(data.get('date'), "%Y-%m-%d").date()
-            time = datetime.strptime(data.get('time'), "%H:%M:%S").time()
+            date = datetime.strptime(obs_data['date'], "%Y-%m-%d").date()
+            time = datetime.strptime(obs_data['time'], "%H:%M:%S").time()
 
-            # Create a new Observation object
-            observation = Observation(
-                date=date,
-                temperature=time,
-                temperature_land_surface=data.get('temperature_land_surface'),
-                temperature_sea_surface=data.get('temperature_sea_surface'),
-                humidity=data.get('humidity'),
-                wind_speed=data.get('wind_speed'),
-                wind_direction=data.get('wind_direction'),
-                precipitation=data.get('precipitation'),
-                haze=data.get('haze'),
-                city_name=data.get('city_name'),
-                weather_id=data.get('weather_id'),
-                w3w_address = w3w_address,
-                longitude=data.get('longitude'),
-                latitude=data.get('latitude')
-            )
+            # Generate what3words address based on latitude and longitude
+            if not obs_data.get('w3w_address'):
+                return jsonify({'message': 'Please provide a W3W address'}), 400
             
-            # Add the observation to the database session
-            db.session.add(observation)
+            w3w_info = get_w3w_info(obs_data['w3w_address'])
 
-        #Commit all the changes to the database
+            coordinates = w3w_info["coordinates"]
+
+            # Create a new observation object
+            new_observation = Observation(
+                date=date,
+                time=time,
+                observer_id=user.user_id,
+                temperature_land_surface=obs_data['temperature_land_surface'],
+                temperature_sea_surface=obs_data['temperature_sea_surface'],
+                timezone_offset=obs_data['timezone_offset'],
+                humidity=obs_data['humidity'],
+                wind_speed=obs_data['wind_speed'],
+                wind_direction=obs_data['wind_direction'],
+                precipitation=obs_data['precipitation'],
+                haze=obs_data['haze'],
+                weather_id=obs_data['weather_id'],
+                country=w3w_info["country"],
+                w3w_address=obs_data['w3w_address'],
+                city_name=w3w_info["nearest_place"],
+                longitude=coordinates["lng"],
+                latitude=coordinates['lat']
+            )
+
+            # Add the new observation to the database
+            db.session.add(new_observation)
+        
+        # Commit all observations to the database
         db.session.commit()
 
-        return jsonify({'message': 'Bulk Observations added successfully'}), 201
+        return jsonify({'message': 'Bulk observations added successfully', 'status_code': 201}), 201
 
     except Exception as e:
-        return jsonify({'message': str(e)}), 500
+        return jsonify({'message': str(e), 'status_code': 500}), 500
+
 
 
 
