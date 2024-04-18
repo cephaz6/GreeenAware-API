@@ -22,16 +22,8 @@ def signup():
 
     email = data.get('email_address')
     password = data.get('password')
-
-    if data.get('user_id') is None or data.get('user_id') == '':
-        user_id = generate_unique_user_id()
-    else:
-        user_id = data.get('user_id')
-    
-    if not data.get('user_role'):
-        user_role = "observer"
-    else:
-        user_role = "admin"
+    user_id = data.get('user_id') or generate_unique_user_id()
+    user_role = "observer" if not data.get('user_role') else "admin"
 
     if not email or not password:
         return jsonify({'message': 'Missing email or password'}), 400
