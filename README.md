@@ -29,7 +29,7 @@ Registered contributors, termed ‘Observers’ will first have to complete an o
 
 ### Requirements:
 
-1. Python 3.x
+1. Python
 2. Flask
 3. flask_sqlalchemy
 4. flask_jwt_extended
@@ -45,7 +45,7 @@ Registered contributors, termed ‘Observers’ will first have to complete an o
 1. Clone this repository.
 2. Install required dependencies: pip install -r requirements.txt.
 3. Configure database connection details in the application configuration file (config.py).
-4. Run the API server: python api.py.
+4. Run the API server: python app.py.
 
 ### Usage:
 
