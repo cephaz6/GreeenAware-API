@@ -1,0 +1,14 @@
+swagger: "2.0"
+info:
+  description: "Homepage endpoint"
+  version: "1.0.0"
+  title: "Homepage"
+paths:
+  /:
+    get:
+      summary: "Get homepage"
+      responses:
+        200:
+          description: "Homepage retrieved successfully"
+        404:
+          description: "Homepage not found"

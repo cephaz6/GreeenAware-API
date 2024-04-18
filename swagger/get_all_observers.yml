@@ -1,0 +1,14 @@
+swagger: "2.0"
+info:
+  description: "Get all observers endpoint"
+  version: "1.0.0"
+  title: "Get All Observers"
+paths:
+  /get-observers:
+    get:
+      summary: "Get all observers"
+      responses:
+        200:
+          description: "Observers retrieved successfully"
+        401:
+          description: "Unauthorized"

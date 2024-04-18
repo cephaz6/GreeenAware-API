@@ -1,0 +1,18 @@
+swagger: "2.0"
+info:
+  title: Weather Delete Endpoint
+  description: Delete weather data by ID.
+  version: "1.0"
+paths:
+  /delete-weather/{id}:
+    delete:
+      summary: Delete weather data by ID.
+      parameters:
+        - name: id
+          in: path
+          description: ID of the weather data to delete.
+          required: true
+          type: integer
+      responses:
+        200:
+          description: Success message.

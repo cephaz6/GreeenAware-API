@@ -1,0 +1,16 @@
+swagger: "2.0"
+info:
+  description: "Bulk observation endpoint"
+  version: "1.0.0"
+  title: "Bulk Observation"
+paths:
+  /add-bulk-observations:
+    post:
+      summary: "Bulk observation"
+      responses:
+        201:
+          description: "Bulk observations added successfully"
+        400:
+          description: "Bad request"
+        401:
+          description: "Unauthorized"

@@ -20,10 +20,13 @@ from werkzeug.security import generate_password_hash, check_password_hash
 def signup():
     data = request.json
 
-    email = data.get('email')
+    email = data.get('email_address')
     password = data.get('password')
-    first_name = data.get('first_name')
-    last_name = data.get('last_name')
+
+    if data.get('user_id') is None or data.get('user_id') == '':
+        user_id = generate_unique_user_id()
+    else:
+        user_id = data.get('user_id')
     
     if not data.get('user_role'):
         user_role = "observer"
@@ -50,12 +53,9 @@ def signup():
 
     hashed_password = generate_password_hash(password)
     
-
     new_user = User (
         email=email,
-        user_id = generate_unique_user_id(),
-        first_name=first_name,
-        last_name=last_name,
+        user_id = user_id,
         password = hashed_password,
         user_role=user_role
     )
@@ -88,7 +88,7 @@ def login():
 
         # Create a response with the access token as a cookie
         response = make_response(jsonify({
-            'message': f'Hi {user.first_name}, Welcome Back!',
+            'message': f'Hi {user.email}, Welcome Back!',
             'status_code': 200
         }))
         response.headers['Authorization'] = 'Bearer ' + access_token  # Add access token to Authorization header

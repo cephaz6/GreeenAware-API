@@ -1,0 +1,22 @@
+swagger: "2.0"
+info:
+  description: "Get observation endpoint"
+  version: "1.0.0"
+  title: "Get Observation"
+paths:
+  /get-observation:
+    get:
+      summary: "Get observation"
+      parameters:
+        - name: "api_key"
+          in: "query"
+          description: "API Key"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Observation retrieved successfully"
+        400:
+          description: "Bad request"
+        401:
+          description: "Unauthorized"

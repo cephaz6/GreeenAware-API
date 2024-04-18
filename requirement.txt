@@ -9,3 +9,5 @@ flask-marshmallow
 marshmallow-sqlalchemy
 requests
 email-validator
+Flask-Swagger-UI
+flasgger

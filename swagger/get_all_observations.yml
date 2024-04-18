@@ -1,0 +1,14 @@
+swagger: "2.0"
+info:
+  description: "Get all observations endpoint"
+  version: "1.0.0"
+  title: "Get All Observations"
+paths:
+  /get-observations:
+    get:
+      summary: "Get all observations"
+      responses:
+        200:
+          description: "Observations retrieved successfully"
+        401:
+          description: "Unauthorized"

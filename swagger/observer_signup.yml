@@ -1,0 +1,14 @@
+swagger: "2.0"
+info:
+  description: "Observer signup endpoint"
+  version: "1.0.0"
+  title: "Observer Signup"
+paths:
+  /signup:
+    post:
+      summary: "Observer signup"
+      responses:
+        200:
+          description: "Observer signed up successfully"
+        400:
+          description: "Bad request"

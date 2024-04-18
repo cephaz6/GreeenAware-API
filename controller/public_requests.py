@@ -1,7 +1,7 @@
 #Imports from other files
 from models import db, Observation
 from utils.error_handler import *
-
+from sqlalchemy import func
 
 # Dependencies Imports from libraries
 from flask import request, jsonify

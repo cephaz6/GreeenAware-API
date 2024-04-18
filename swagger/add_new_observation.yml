@@ -1,0 +1,16 @@
+swagger: "2.0"
+info:
+  description: "Add new observation endpoint"
+  version: "1.0.0"
+  title: "Add New Observation"
+paths:
+  /add-observation:
+    post:
+      summary: "Add new observation"
+      responses:
+        201:
+          description: "Observation added successfully"
+        400:
+          description: "Bad request"
+        401:
+          description: "Unauthorized"

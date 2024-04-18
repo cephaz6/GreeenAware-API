@@ -1,0 +1,22 @@
+swagger: "2.0"
+info:
+  description: "Update observation endpoint"
+  version: "1.0.0"
+  title: "Update Observation"
+paths:
+  /update-observations/{id}:
+    patch:
+      summary: "Update observation"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Observation ID"
+          required: true
+          type: "integer"
+      responses:
+        200:
+          description: "Observation updated successfully"
+        400:
+          description: "Bad request"
+        401:
+          description: "Unauthorized"

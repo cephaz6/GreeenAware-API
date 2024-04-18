@@ -1,0 +1,14 @@
+swagger: "2.0"
+info:
+  description: "Observer login endpoint"
+  version: "1.0.0"
+  title: "Observer Login"
+paths:
+  /login:
+    post:
+      summary: "Observer login"
+      responses:
+        200:
+          description: "Observer logged in successfully"
+        400:
+          description: "Bad request"

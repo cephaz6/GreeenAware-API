@@ -1,10 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
-<<<<<<< HEAD
 from werkzeug.security import check_password_hash
 from datetime import datetime
-=======
-from werkzeug.security import check_password_hash, generate_password_hash
->>>>>>> 6ca388604747902004831accef22f6b7ac9aa2a0
 
 db = SQLAlchemy()
 
@@ -12,20 +8,16 @@ class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.String(8), unique=True, nullable=False)
+    user_id = db.Column(db.String(10), unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
-    first_name = db.Column(db.String(100), nullable=False)
-    last_name = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=False)
     user_role = db.Column(db.String(100), nullable=False)
-    createdAt = db.Column(db.DateTime, default=datetime.utcnow)
-    updatedAt = db.Column(db.DateTime, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
-    def __init__(self, email, user_id, first_name, last_name, password, user_role):
+    def __init__(self, user_id, email, password, user_role):
         self.user_id = user_id
         self.email = email
-        self.first_name = first_name
-        self.last_name = last_name
         self.password = password
         self.user_role = user_role
 
@@ -34,11 +26,12 @@ class User(db.Model):
 
     def to_dict(self):
         return {
+            'id': self.id,
             'user_id': self.user_id,
             'email': self.email,
-            'first_name': self.first_name,
-            'last_name': self.last_name,
-            'user_role': self.user_role
+            'user_role': self.user_role,
+            'created_at': str(self.created_at),
+            'updated_at': str(self.updated_at)
         }
 
 class Observation(db.Model):
