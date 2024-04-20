@@ -22,6 +22,7 @@ def signup():
 
     email = data.get('email_address')
     password = data.get('password')
+
     user_id = data.get('user_id') or generate_unique_user_id()
     user_role = "observer" if not data.get('user_role') else "admin"
 
