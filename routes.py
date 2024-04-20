@@ -276,3 +276,8 @@ def weather_delete(id):
         description: Success message.
     """
     return delete_weather(id)
+
+
+@router.route('/weather-notes', methods=['GET'])
+def weather_notes():
+    return get_weather_notes()

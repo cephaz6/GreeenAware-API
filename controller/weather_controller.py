@@ -94,3 +94,12 @@ def delete_weather(id):
 
     except Exception as e:
         return jsonify({'message': str(e)}), 500
+
+
+def get_weather_notes():
+    weather_objects = Weather.query.all()
+    sorted_weather_objects = sorted(weather_objects, key=lambda x: x.main)
+    
+    # Convert sorted weather objects to dictionaries
+    weather_dicts = [weather.to_dict() for weather in sorted_weather_objects]
+    return jsonify(weather_dicts), 200
