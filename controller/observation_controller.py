@@ -15,12 +15,13 @@ from flask_jwt_extended import get_jwt_identity
 def add_observation():
     try:
         # Check if authenticated
-        verify_observer()
+        # verify_observer()
+        # current_user = get_jwt_identity()
 
-        current_user = get_jwt_identity()
-        user = User.query.filter_by(email=current_user).first()
+        # user = User.query.filter_by(email=current_user).first()
 
         data = request.json
+        print(data)
 
         # Convert date and time strings to datetime objects
         date = datetime.strptime(data['date'], "%Y-%m-%d").date()
@@ -38,7 +39,7 @@ def add_observation():
         new_observation = Observation(
             date=date,
             time=time,
-            observer_id = user.user_id,
+            observer_id = data['user_id'],
             temperature_land_surface=data['temperature_land_surface'],
             temperature_sea_surface=data['temperature_sea_surface'],
             timezone_offset=data['timezone_offset'],
@@ -62,6 +63,7 @@ def add_observation():
         return jsonify({'message': 'Observation added successfully', 'status_code': 201}), 201
 
     except Exception as e:
+        print(e)
         return jsonify({'message': str(e), 'status_code': 500}), 500
 
 
@@ -76,6 +78,7 @@ def add_bulk_observations():
 
         data = request.json
         
+        print(data)
         # Check if observations key exists in the JSON data
         if 'observations' not in data:
             return jsonify({'message': 'No observations found in the request data'}), 400
@@ -138,14 +141,23 @@ def add_bulk_observations():
 
 # ____________________________________GET ALL OBSERVATIONS
 def get_observations():
-    #check if authenticated
-    current_user = get_jwt_identity()
+    # Check if authenticated
+    # current_user = get_jwt_identity()
 
-    if not current_user:
-        return jsonify({'message': 'Unauthorized'}), 403
-        
-    observations = Observation.query.all()
-    return jsonify([observations.to_dict() for observations in observations])
+    # if not current_user:
+    #     return jsonify({'message': 'Unauthorized'}), 403
+
+    # Retrieve the observer's ID from the JWT token
+    observer_id = 'kauqksve1y'
+    # observer_id = current_user.get('user_id')
+
+    # Query observations created by the particular observer
+    observations = Observation.query.filter_by(observer_id=observer_id).all()
+
+    # Convert observations to dictionary format
+    observations_list = [observation.to_dict() for observation in observations]
+
+    return jsonify(observations_list)
 
 
 #_______________________________________                                                UPDATE OBSERVATION

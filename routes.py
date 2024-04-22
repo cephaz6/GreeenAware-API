@@ -115,7 +115,7 @@ def get_all_observers():
 
 # Observation Routes
 @router.route('/add-observation', methods=['POST'])
-@jwt_required()
+# @jwt_required()
 @swag_from('swagger/add_new_observation.yml')
 def add_new_observation():
     """
@@ -170,7 +170,7 @@ def bulk_observation():
     return add_bulk_observations(request.json)
 
 @router.route('/get-observations', methods=['GET'])
-@jwt_required()
+# @jwt_required()
 @swag_from('swagger/get_all_observations.yml')
 def get_all_observations():
     """
@@ -181,6 +181,7 @@ def get_all_observations():
         description: List of observations.
     """
     return get_observations()
+
 
 @router.route('/update-observations/<int:id>', methods=['PATCH'])
 @jwt_required()
