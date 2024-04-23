@@ -69,7 +69,7 @@ def get_observation_id(observation_id):
     return get_observation_by_id(observation_id)
 
 
-@router.route('/update-observations/<int:id>', methods=['PATCH'])
+@router.route('/update-observation/<int:id>', methods=['PATCH'])
 @jwt_required()
 def observation_update(id):
     return update_observation(id)
