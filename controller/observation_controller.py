@@ -172,17 +172,17 @@ def get_observation_by_id(observation_id):
 
 
 #_______________________________________                                                UPDATE OBSERVATION
-def update_observation(id):
+def update_observation(observation_id):
 
-    verify_observer()
+    # verify_observer()
 
-    current_user = get_jwt_identity()
-    user = User.query.filter_by(email=current_user).first()
+    # current_user = get_jwt_identity()
+    # user = User.query.filter_by(email=current_user).first()
 
-    observation = Observation.query.get_or_404(id)
+    observation = Observation.query.get_or_404(observation_id)
     
-    if user.user_id is not observation.observer_id:
-        return {'error': 'Unauthorized, Not Your Observation'}, 403  
+    # if user.user_id is not observation.observer_id:
+    #     return {'error': 'Unauthorized, Not Your Observation'}, 403  
 
     observation_year = observation.date.year
     observation_quarter = observation.date.month
