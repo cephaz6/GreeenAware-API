@@ -84,6 +84,19 @@ class Observation(db.Model):
         self.w3w_address = w3w_address
 
     def to_dict(self):
+        # Fetch the associated weather object
+        weather = Weather.query.get(self.weather_id)
+
+        # Initialize weather data variables
+        weather_main = None
+        weather_description = None
+
+        # Check if weather object exists
+        if weather:
+            # Get weather data
+            weather_main = weather.main
+            weather_description = weather.description
+
         return {
             'id': self.id,
             'date': str(self.date),
@@ -99,7 +112,8 @@ class Observation(db.Model):
             'city_name': self.city_name,
             'country': self.country,
             'timezone_offset': self.timezone_offset,
-            'weather_id': self.weather_id,
+            'weather_main': weather_main,  # Add weather main data
+            'weather_description': weather_description,  # Add weather description data
             'longitude': self.longitude,
             'latitude': self.latitude,
             'w3w_address': self.w3w_address

@@ -160,6 +160,17 @@ def get_observations():
     return jsonify(observations_list)
 
 
+
+def get_observation_by_id(observation_id):
+    # Query observations created by the particular observer
+    observations = Observation.query.filter_by(id=observation_id).all()
+
+    # Convert observations to dictionary format
+    observation_list = [observation.to_dict() for observation in observations]
+
+    return jsonify(observation_list)
+
+
 #_______________________________________                                                UPDATE OBSERVATION
 def update_observation(id):
 
