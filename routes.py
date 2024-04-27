@@ -38,6 +38,10 @@ def observer_signup():
 def observer_login():
     return login()
 
+@router.route('/update-password', methods=['POST'])
+def password_update():
+    return update_password()
+
 @router.route('/get-observers', methods=['GET'])
 @jwt_required()
 def get_all_observers():

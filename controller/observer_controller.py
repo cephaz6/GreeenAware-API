@@ -93,6 +93,31 @@ def login():
         return jsonify({'message': str(e), 'status_code': 500}), 500
 
 
+def update_password():
+    data = request.json
+
+    print(data)
+    user_id = data.get('user_id')
+    new_password = data.get('new_password')
+
+    if not user_id or not new_password:
+        return jsonify({'message': 'Missing User ID or new password'}), 400
+
+    user = User.query.filter_by(user_id=user_id).first()
+
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+
+    if not is_strong_password(new_password):
+        return jsonify({'message': 'Choose a stronger new password'}), 400
+
+    hashed_new_password = generate_password_hash(new_password)
+
+    # Update user's password
+    user.password = hashed_new_password
+    db.session.commit()
+
+    return jsonify({'message': 'Password updated successfully', 'status_code': 200})
 
 # __________________ SEE LIST OF ALL OBSERVERS
 def get_observers():
