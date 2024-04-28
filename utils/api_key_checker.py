@@ -13,12 +13,32 @@ def check_api_key(api_key):
             # Check if the provided API key exists in the list of API keys
             for key_data in api_keys_data:
                 if key_data.get('api_key') == api_key:
-                    return True
-        return False
+                    # Return both True and the matched API key object
+                    return True, key_data
+            
+        # If the API key is not found, return False and None
+        return False, None
     
     except Exception as e:
         print(f"Error checking API key: {e}")
-        return False
+        return False, None
+
+#REGISTER API CALLS ON WEBSITE
+def register_call(user_id, api_key):
+    url = "http://127.0.0.1:8000/register-api-call/"
+    data = {
+        'api_key': api_key,
+        'user_id': user_id
+    }
+
+    try:
+        response = requests.post(url, data=data)
+        response_data = response.json()
+        return response_data
+
+    except Exception as e:
+        print(e)
+        return {'success': False, 'message': f'An error occurred: {str(e)}'}
 
 
 # def check_api_key(api_key):

@@ -2,6 +2,8 @@
 from models import db, Observation
 from utils.error_handler import *
 from sqlalchemy import func
+from utils.api_key_checker import *
+
 
 # Dependencies Imports from libraries
 from flask import request, jsonify
@@ -9,6 +11,20 @@ from flask import request, jsonify
 
 #______________________________________________GET OBSERVATION BY CITY NAME
 def get_observations_by_city():
+    api_key = request.args.get('api_key')
+    if not api_key:
+        return jsonify({'error': 'API Key is missing'}), 400
+    
+    response = check_api_key(api_key)
+    if not response[0]:
+        return jsonify({'message': 'Invalid API key'}), 401
+    else:
+        key_data = response[1]
+        user_id = key_data['user_id']
+        api_key = key_data['api_key']
+
+    if key_data['calls'] >= key_data['quota_allotted']:
+        return jsonify({'message': 'You Have Used Up Your Allotted Quota, Please Upgrade Your Plan'}), 401
     try:
         # Extract city name from request query parameters
         city_name = request.args.get('city_name')
@@ -42,7 +58,9 @@ def get_observations_by_city():
                     'description': observation.weather.description
                 }
             }
+            register_call(user_id, api_key)
             return jsonify(observation_data), 200
+
         else:
             return jsonify({'message': f'Observation not found for city: {city_name}', 'status_code': 404}), 404
 

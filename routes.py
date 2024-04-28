@@ -20,11 +20,6 @@ def homepage():
 
 @router.route('/get-observation', methods=['GET'])
 def get_observation():
-    api_key = request.args.get('api_key')
-    if not api_key:
-        return jsonify({'error': 'API Key is missing'}), 400
-    if not check_api_key(api_key):
-        return jsonify({'message': 'Invalid API key'}), 401
     return get_observations_by_city()
 
 
