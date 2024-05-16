@@ -137,27 +137,80 @@ def add_bulk_observations():
         return jsonify({'message': str(e), 'status_code': 500}), 500
 
 
+def upload_bulk():
+    try:
+        if 'file' not in request.files:
+            return jsonify({'error': 'No file part'}), 400
+
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({'error': 'No selected file'}), 400
+
+        try:
+            json_data = json.load(file)
+            print(json_data)
+        except json.JSONDecodeError:
+            return jsonify({'error': 'Invalid JSON format'}), 400
+
+        # Process the JSON data and save to the database
+        try:
+            observations = []
+            for item in json_data:
+
+                # Convert date and time strings to datetime objects
+                date = datetime.strptime(item['date'], "%Y-%m-%d").date()
+                time = datetime.strptime(item['time'], "%H:%M:%S").time()
+
+                # Generate what3words address based on latitude and longitude
+                if not item['w3w_address']:
+                    return jsonify({'message': 'Please provide a W3W address'}), 400
+                
+                w3w_info = get_w3w_info(item['w3w_address'])
+
+                coordinates = w3w_info["coordinates"]
+
+                observation = Observation(
+                    date=date,
+                    time=time,
+                    observer_id=user.user_id,
+                    temperature_land_surface=item['temperature_land_surface'],
+                    temperature_sea_surface=item['temperature_sea_surface'],
+                    timezone_offset=item['timezone_offset'],
+                    humidity=item['humidity'],
+                    wind_speed=item['wind_speed'],
+                    wind_direction=item['wind_direction'],
+                    precipitation=item['precipitation'],
+                    haze=item['haze'],
+                    weather_id=item['weather_id'],
+                    country=w3w_info["country"],
+                    w3w_address=item['w3w_address'],
+                    city_name=w3w_info["nearest_place"],
+                    longitude=coordinates["lng"],
+                    latitude=coordinates['lat']
+                )
+                observations.append(observation)
+            
+            db.session.bulk_save_objects(observations)
+            db.session.commit()
+            return jsonify({'message': 'File processed successfully'}), 200
+
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'error': f'Error saving to database: {e}'}), 500
+    except Exception as e:
+        return jsonify({'error': f'An unexpected error occurred: {e}'}), 500
+
 
 
 # ____________________________________GET ALL OBSERVATIONS
-def get_observations():
-    # Check if authenticated
-    # current_user = get_jwt_identity()
-
-    # if not current_user:
-    #     return jsonify({'message': 'Unauthorized'}), 403
-
-    # Retrieve the observer's ID from the JWT token
-    observer_id = 'kauqksve1y'
-    # observer_id = current_user.get('user_id')
-
+def get_observations(observer_id):
     # Query observations created by the particular observer
     observations = Observation.query.filter_by(observer_id=observer_id).all()
 
     # Convert observations to dictionary format
-    observations_list = [observation.to_dict() for observation in observations]
+    observation_list = [observation.to_dict() for observation in observations]
 
-    return jsonify(observations_list)
+    return jsonify(observation_list)
 
 
 

@@ -56,10 +56,16 @@ def add_new_observation():
 def bulk_observation():
     return add_bulk_observations(request.json)
 
-@router.route('/get-observations', methods=['GET'])
+@router.route('/upload-bulk', methods=['POST'])
 # @jwt_required()
-def get_all_observations():
-  return get_observations()
+def upload_observation():
+    return upload_bulk(request.json)
+
+
+@router.route('/get-observations/<observer_id>', methods=['GET'])
+# @jwt_required()
+def get_all_observations(observer_id):
+  return get_observations(observer_id)
 
 
 @router.route('/get-observation/<int:observation_id>', methods=['GET'])

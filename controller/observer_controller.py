@@ -82,6 +82,7 @@ def login():
         # Create a response with the access token as a cookie
         response = make_response(jsonify({
             'message': f'Hi {user.email}, Welcome Back!',
+            'access_token': access_token,
             'status_code': 200
         }))
         response.headers['Authorization'] = 'Bearer ' + access_token  # Add access token to Authorization header
